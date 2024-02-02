@@ -9,8 +9,8 @@ server.use(cors());
 
 server.get('/', (req, res) => {
     res.json('Olá');
-})
+});
 
-server.listen(port, () => [
-    console.log(`http://localhost:${port}`)
-])
+server.listen(port, () => {
+    console.log(`http://localhost:${port}`);
+});

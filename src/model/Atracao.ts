@@ -25,4 +25,3 @@ export class Atracao {
         this.habitats = habitats;
     }
 }
-

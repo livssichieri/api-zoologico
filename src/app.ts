@@ -14,42 +14,40 @@ server.use(express.json());
 server.use(cors());
 
 server.get('/', (req, res) => {
-   let ave: Ave= new Ave(10, 'Calopsita', 11, 'Masculino');
-   let reptil: Reptil= new Reptil ('placóides', 'Cobra', 15, 'Masculino');
-   let mamifero: Mamifero= new Mamifero ('canguru', 'Julia', 12, 'Feminino');
+    let ave: Ave = new Ave(10, 'Calopsita', 11, 'Masculino');
+    let reptil: Reptil = new Reptil('placóides', 'Cobra', 15, 'Masculino');
+    let mamifero: Mamifero = new Mamifero('canguru', 'Julia', 12, 'Feminino');
 
-    res.json([ave,reptil, mamifero]);
+    res.json([ave, reptil, mamifero]);
 });
 
-server.post('/ave', (req,res) => {
-    const{ envergadura, nome, idade, genero} = req.body;
-    let ave: Ave= new Ave(envergadura, nome, idade, genero);
+server.post('/ave', (req, res) => {
+    const { envergadura, nome, idade, genero } = req.body;
+    let ave: Ave = new Ave(envergadura, nome, idade, genero);
     res.json(["A nova ave do zoologico é:", ave]);
 });
 
 server.post('/habitat', (req, res) => {
-    const {nome, animais}= req.body;
+    const { nome, animais } = req.body;
     const habitat = new Habitat(nome, animais);
-    console.log(habitat)
+    console.log(habitat);
     res.status(200).json('Habitat criado');
 });
 
 server.post('/atracao', (req, res) => {
-    const {nome, habitat}= req.body;
+    const { nome, habitat } = req.body;
     const atracao = new Atracao(nome, habitat);
-    console.log(atracao)
-    res.status(200).json('Atrção criada');
+    console.log(atracao);
+    res.status(200).json('Atração criada');
 });
 
 server.post('/zoologico', (req, res) => {
-    const {nome, atracao}= req.body;
-    const zoo = new Zoologico (nome, atracao);
+    const { nome, atracao } = req.body;
+    const zoo = new Zoologico(nome, atracao);
     console.log(zoo);
     res.status(200).json('Zoologico criado');
 });
 
-
-
 server.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-})
+    console.log(`Server is running on port ${port}`);
+});

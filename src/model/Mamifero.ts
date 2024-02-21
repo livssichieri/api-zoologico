@@ -1,14 +1,13 @@
-
-
 import { Animal } from "./Animal";
 import { DatabaseModel } from "./DatabaseModel";
 
 const database = new DatabaseModel().pool;
 
 /**
- * Representa um mamífero no zoológico, que é uma subclasse de Animal.
+ * Representa um mamífero no zoológico, uma subclasse de Animal.
  */
 export class Mamifero extends Animal {
+    
     /**
      * A raça do mamífero.
      */
@@ -17,15 +16,16 @@ export class Mamifero extends Animal {
     /**
      * Cria uma nova instância de Mamifero.
      * 
+     * @param _raca A raça do mamífero.
      * @param _nome O nome do mamífero.
      * @param _idade A idade do mamífero.
      * @param _genero O gênero do mamífero.
-     * @param _raca A raça do mamífero.
      */
-    constructor(_nome: string, 
-                _idade: number, 
-                _genero: string, 
-                _raca: string) {
+    constructor(_raca: string,
+                _nome: string,
+                _idade: number,
+                _genero: string) {
+        // Chamada ao construtor da classe pai (Animal) para definir nome, idade e gênero
         super(_nome, _idade, _genero);
         this.raca = _raca;
     }
@@ -42,16 +42,16 @@ export class Mamifero extends Animal {
     /**
      * Define a raça do mamífero.
      * 
-     * @param _raca A raça a ser atribuída ao mamífero.
+     * @param raca A raça a ser atribuída ao mamífero.
      */
-    public setRaca(_raca: string): void {
-        this.raca = _raca;
+    public setRaca(raca: string): void {
+        this.raca = raca;
     }
 
     static async listarMamiferos() {
         const listaDeMamiferos: Array<Mamifero> = [];
         try {
-            const queryReturn = await database.query(`SELECT * FROM  mamifero`);
+            const queryReturn = await database.query(`SELECT * FROM mamifero`);
             queryReturn.rows.forEach(mamifero => {
                 listaDeMamiferos.push(mamifero);
             });

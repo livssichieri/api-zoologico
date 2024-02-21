@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import { Habitat } from "./model/Habitat";
@@ -8,6 +7,7 @@ import { DatabaseModel } from "./model/DatabaseModel";
 import { Reptil } from "./model/Reptil";
 import { Mamifero } from "./model/Mamifero";
 import { Ave } from "./model/Ave";
+import { getEnabledCategories } from "trace_events";
 
 const server = express();
 const port: number = 3000;
@@ -62,30 +62,30 @@ server.post('/new/reptil', async (req, res) => {
 })
 
 server.get('/list/mamifero', async (req, res) => {
-    const mamiferos = await Mamifero.listarMamiferos();
+    const mamifero = await Mamifero.listarMamiferos();
 
-    res.status(200).json(mamiferos);
-});
+    res.status(200).json(mamifero);
+})
 
 server.post('/new/mamifero', async (req, res) => {
     const { nome, idade, genero, raca } = req.body;
 
-    const novoMamifero = new Mamifero(nome, idade, genero, raca);
+    const novoMamifero = new Mamifero(raca, nome, idade, genero);
 
     const result = await Mamifero.cadastrarMamifero(novoMamifero);
 
-    if (result) {
-        return res.status(200).json('Mamífero cadastrado com sucesso');
+    if(result) {
+        return res.status(200).json('Mamifero cadastrado com sucesso');
     } else {
-        return res.status(400).json('Não foi possível cadastrar o mamífero no banco de dados');
+        return res.status(400).json('Não foi possível cadastrar o mamifero no banco de dados');
     }
-});
+})
 
 server.get('/list/ave', async (req, res) => {
-    const aves = await Ave.listarAves();
+    const ave = await Ave.listarAves();
 
-    res.status(200).json(aves);
-});
+    res.status(200).json(ave);
+})
 
 server.post('/new/ave', async (req, res) => {
     const { nome, idade, genero, envergadura } = req.body;
@@ -95,13 +95,11 @@ server.post('/new/ave', async (req, res) => {
     const result = await Ave.cadastrarAve(novaAve);
 
     if(result) {
-        return res.status(200).json('Ave cadastrada com sucesso');
+        return res.status(200).json('Ave cadastrado com sucesso');
     } else {
-        return res.status(400).json('Não foi possível cadastrar a ave no banco de dados');
+        return res.status(400).json('Não foi possível cadastrar o ave no banco de dados');
     }
-});
-
-
+})
 
 new DatabaseModel().testeConexao().then((resbd) => {
     if(resbd) {

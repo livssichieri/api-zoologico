@@ -4,6 +4,9 @@ import { Animal } from "./Animal";
  * Classe que representa um Réptil, uma extensão da classe Animal.
  */
 export class Reptil extends Animal {
+    static listarRepteis() {
+        throw new Error('Method not implemented.');
+    }
 
     /**
      * Propriedade privada que armazena o tipo de escamas do réptil.

@@ -1,12 +1,13 @@
-import express from 'express';
-import cors from 'cors';
-import { Ave } from './model/Ave';
-import { Reptil } from './model/Reptil';
-import { Mamifero } from './model/Mamifero';
-import { Atracao } from './model/Atracao';
-import { Zoologico } from './model/Zoologico';
-import { Habitat } from './model/Habitat';
-import { DatabaseModel } from './model/DatabaseModel';
+
+import express from "express";
+import cors from "cors";
+import { Habitat } from "./model/Habitat";
+import { Atracao } from "./model/Atracao";
+import { Zoologico } from "./model/Zoologico";
+import { DatabaseModel } from "./model/DatabaseModel";
+import { Reptil } from "./model/Reptil";
+import { Mamifero } from "./model/Mamifero";
+import { Ave } from "./model/Ave";
 
 const server = express();
 const port: number = 3000;
@@ -15,17 +16,7 @@ server.use(express.json());
 server.use(cors());
 
 server.get('/', (req, res) => {
-    let ave: Ave = new Ave(10, 'Calopsita', 11, 'Masculino');
-    let reptil: Reptil = new Reptil('placóides', 'Cobra', 15, 'Masculino');
-    let mamifero: Mamifero = new Mamifero('canguru', 'Julia', 12, 'Feminino');
-
-    res.json([ave, reptil, mamifero]);
-});
-
-server.post('/ave', (req, res) => {
-    const { envergadura, nome, idade, genero } = req.body;
-    let ave: Ave = new Ave(envergadura, nome, idade, genero);
-    res.json(["A nova ave do zoologico é:", ave]);
+    res.json("ola");
 });
 
 server.post('/habitat', (req, res) => {
@@ -46,21 +37,78 @@ server.post('/zoologico', (req, res) => {
     const { nome, atracao } = req.body;
     const zoo = new Zoologico(nome, atracao);
     console.log(zoo);
-    res.status(200).json('Zoologico criado');
+    res.status(200).json('Zoológico criado');
 });
 
-server.get('/reptil', async (req, res) => {
-    const reptil = await Reptil.listarRepteis();
+server.get('/list/reptil', async (req, res) => {
+    const repteis = await Reptil.listarRepteis();
 
-    res.status(200).json(reptil);
+    res.status(200).json(repteis);
 })
 
+server.post('/new/reptil', async (req, res) => {
+    const { nome, idade, genero, tipo_de_escamas } = req.body;
+
+    const novoReptil = new Reptil(nome, idade, genero, tipo_de_escamas);
+
+    const result = await Reptil.cadastrarReptil(novoReptil);
+
+    if(result) {
+        return res.status(200).json('Reptil cadastrado com sucesso');
+    } else {
+        return res.status(400).json('Não foi possível cadastrar o réptil no banco de dados');
+    }
+    
+})
+
+server.get('/list/mamifero', async (req, res) => {
+    const mamiferos = await Mamifero.listarMamiferos();
+
+    res.status(200).json(mamiferos);
+});
+
+server.post('/new/mamifero', async (req, res) => {
+    const { nome, idade, genero, raca } = req.body;
+
+    const novoMamifero = new Mamifero(nome, idade, genero, raca);
+
+    const result = await Mamifero.cadastrarMamifero(novoMamifero);
+
+    if (result) {
+        return res.status(200).json('Mamífero cadastrado com sucesso');
+    } else {
+        return res.status(400).json('Não foi possível cadastrar o mamífero no banco de dados');
+    }
+});
+
+server.get('/list/ave', async (req, res) => {
+    const aves = await Ave.listarAves();
+
+    res.status(200).json(aves);
+});
+
+server.post('/new/ave', async (req, res) => {
+    const { nome, idade, genero, envergadura } = req.body;
+
+    const novaAve = new Ave(nome, idade, genero, envergadura);
+
+    const result = await Ave.cadastrarAve(novaAve);
+
+    if(result) {
+        return res.status(200).json('Ave cadastrada com sucesso');
+    } else {
+        return res.status(400).json('Não foi possível cadastrar a ave no banco de dados');
+    }
+});
+
+
+
 new DatabaseModel().testeConexao().then((resbd) => {
-    if(resbd){
+    if(resbd) {
         server.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
+            console.log(`Servidor rodando em http://localhost:${port}`);
         })
     } else {
-        console.log('Não foi possível conectar ao banco de dados')
+        console.log('Não foi possível conectar ao banco de dados');
     }
 })
